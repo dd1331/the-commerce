@@ -1,16 +1,23 @@
 package com.example.thecommerce.user;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import lombok.*;
 
-@Table(name = "user")
+import javax.persistence.*;
+
+@Table(name = "users")
+@Entity
+@Builder
+@Getter
+@ToString
+@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserEntity {
-    @Id @GeneratedValue()
+    @Id
+    @GeneratedValue()
     @Column(name = "user_id")
     private Long id;
 
+    @Column(unique = true)
     private String identifier;
 
     private String password;
@@ -19,12 +26,11 @@ public class UserEntity {
 
     private String name;
 
+    @Column(unique = true)
     private String mobile;
 
+    @Column(unique = true)
     private String email;
-
-
-
 
 
 }
