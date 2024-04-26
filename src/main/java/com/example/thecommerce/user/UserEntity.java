@@ -1,14 +1,17 @@
 package com.example.thecommerce.user;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Table(name = "users")
 @Entity
 @Builder
 @Getter
 @ToString
+@EqualsAndHashCode
 @AllArgsConstructor
 @RequiredArgsConstructor
 public class UserEntity {
@@ -32,5 +35,7 @@ public class UserEntity {
     @Column(unique = true)
     private String email;
 
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
 }

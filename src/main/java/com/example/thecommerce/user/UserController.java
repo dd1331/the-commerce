@@ -1,5 +1,9 @@
 package com.example.thecommerce.user;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,11 +19,19 @@ public class UserController {
         userService.join(dto);
     }
 
-    @GetMapping("list")
-    void getUsers(@RequestBody ListDto dto) {
-        userService.getUsers(dto);
+    @GetMapping("/list")
+    UserListResponse getUsers(@RequestParam int page,
+                              @RequestParam int pageSize,
+                              @RequestParam Sort.Direction sortDirection,
+                              @RequestParam SortBy sortBy) {
+        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sortDirection, sortBy.getValue()));
+
+        Page<UserEntity> usersPage = userService.getUsers(pageable);
+
+        return UserListResponse.builder().users(usersPage.getContent()).totalPages(usersPage.getTotalPages()).totalElements(usersPage.getTotalElements()).build();
 
     }
+
 
     @PatchMapping("{identifier}")
     void updateUser(@PathVariable String identifier, @RequestBody UpdateDto dto) {

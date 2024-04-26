@@ -1,6 +1,8 @@
 package com.example.thecommerce.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,14 +31,10 @@ public class UserService {
 
     public void validateDuplication(JoinDto dto) {
         boolean email = userRepository.existsByEmail(dto.getEmail());
-        System.out.println(userRepository.findAll());
-        System.out.println(email + " " + dto.getEmail());
 
         if (email) throw new DuplicateUserException("이메일: " + dto.getEmail());
 
         boolean mobile = userRepository.existsByMobile(dto.getMobile());
-
-        System.out.println(mobile + " " + dto.getMobile());
 
         if (mobile) throw new DuplicateUserException("휴대폰: " + dto.getMobile());
 
@@ -46,7 +44,8 @@ public class UserService {
 
     }
 
-    public void getUsers(ListDto dto) {
+    public Page<UserEntity> getUsers(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 
     public void updateUser(String identifier, UpdateDto dto) {
