@@ -6,7 +6,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -24,16 +25,19 @@ class UserServiceUnitTest {
 
         when(userRepository.existsByIdentifier(dto.getIdentifier())).thenReturn(true);
 
-        assertThrows(RuntimeException.class, () -> userService.join(dto));
+        assertThrows(DuplicateUserException.class, () -> userService.join(dto));
     }
 
     @Test
     void testJoin_IdentifierNotExists() {
         JoinDto dto = new JoinDto();
         dto.setIdentifier("testIdentifier");
+        dto.setPassword("testPassword");
 
         when(userRepository.existsByIdentifier(dto.getIdentifier())).thenReturn(false);
 
         assertDoesNotThrow(() -> userService.join(dto));
     }
+
+    // TODO: 모바일/이메일 중복테스트
 }

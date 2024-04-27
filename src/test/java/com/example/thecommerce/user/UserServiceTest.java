@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,6 +21,7 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@Transactional
 class UserServiceTest {
 
     @Autowired
@@ -137,7 +139,9 @@ class UserServiceTest {
                 .map(userService::join)
                 .collect(Collectors.toList());
 
-        System.out.println(users);
+        entityManager.flush();
+        entityManager.clear();
+
         List<UserEntity> expectedUsers = users.stream()
                 .sorted(Comparator.comparing(UserEntity::getCreatedAt).reversed())
                 .collect(Collectors.toList());
