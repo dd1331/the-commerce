@@ -34,7 +34,9 @@ public class UserController {
 
 
     @PatchMapping("{identifier}")
-    void updateUser(@PathVariable String identifier, @RequestBody UpdateDto dto) {
-        userService.updateUser(identifier, dto);
+    PostUpdateResponse updateUser(@PathVariable String identifier, @RequestBody UpdateDto dto) throws UserNotFoundException {
+        UserEntity user = userService.updateUser(identifier, dto);
+
+        return PostUpdateResponse.builder().email(user.getEmail()).mobile(user.getMobile()).build();
     }
 }

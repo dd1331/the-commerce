@@ -1,12 +1,9 @@
 package com.example.thecommerce.user;
 
 import lombok.Builder;
-import lombok.Getter;
 
 @Builder
-@Getter
-// TODO: validation
-public class UpdateDto {
+public class PostUpdateResponse {
     String name;
     String nickname;
     String email;

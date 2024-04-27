@@ -5,24 +5,23 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
 
     // TODO: response dto
+    // 비밀번호 암호화
     public UserEntity join(JoinDto dto) {
 
         validateDuplication(dto);
 
-        UserEntity user = UserEntity.builder()
-                .identifier(dto.getIdentifier())
-                .password(dto.getPassword())
-                .name(dto.getName())
-                .nickname(dto.getNickname())
-                .mobile(dto.getMobile())
-                .email(dto.getEmail())
-                .build();
+        UserEntity user = UserEntity.builder().build();
+
+        user.join(dto);
+
 
         userRepository.save(user);
 
@@ -48,6 +47,14 @@ public class UserService {
         return userRepository.findAll(pageable);
     }
 
-    public void updateUser(String identifier, UpdateDto dto) {
+    public UserEntity updateUser(String identifier, UpdateDto dto) {
+
+        Optional<UserEntity> user = userRepository.findOneByIdentifier(identifier);
+
+        if (!user.isPresent()) throw new UserNotFoundException();
+
+        user.get().update(dto);
+        
+        return userRepository.save(user.get());
     }
 }

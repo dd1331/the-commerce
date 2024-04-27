@@ -1,6 +1,7 @@
 package com.example.thecommerce.user;
 
 import com.github.javafaker.Faker;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -77,10 +78,11 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("유저목록 조회 페이징")
     void getUsers() {
         Faker faker = new Faker();
 
-        List<UserEntity> users = IntStream.range(0, 11)
+        IntStream.range(0, 11)
                 .mapToObj(i -> JoinDto.builder()
                         .identifier(faker.name().fullName())
                         .password(faker.internet().password())
@@ -120,6 +122,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("가입일로 정렬")
     void getUsersSortedByCreatedAt() {
         Faker faker = new Faker();
         List<UserEntity> users = IntStream.range(0, 11)
@@ -134,6 +137,7 @@ class UserServiceTest {
                 .map(userService::join)
                 .collect(Collectors.toList());
 
+        System.out.println(users);
         List<UserEntity> expectedUsers = users.stream()
                 .sorted(Comparator.comparing(UserEntity::getCreatedAt).reversed())
                 .collect(Collectors.toList());
@@ -152,6 +156,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("이름으로 정렬")
     void getUsersSortedByName() {
         Faker faker = new Faker();
         List<UserEntity> users = IntStream.range(0, 11)
@@ -183,7 +188,58 @@ class UserServiceTest {
 
     }
 
-    @Test
-    void updateUser() {
+    @Test()
+    @DisplayName("유저의 변경 가능한 모든 데이터 변경")
+    void updateUserAll() {
+        Faker faker = new Faker();
+        JoinDto dto = JoinDto.builder()
+                .identifier(faker.name().fullName())
+                .password(faker.internet().password())
+                .email(faker.internet().emailAddress())
+                .name(faker.name().fullName())
+                .nickname(faker.name().username())
+                .mobile(faker.phoneNumber().cellPhone()).build();
+
+        UserEntity user = userService.join(dto);
+
+        UpdateDto updateDto = UpdateDto.builder()
+                .password(faker.internet().password())
+                .email(faker.internet().emailAddress())
+                .name(faker.name().fullName())
+                .nickname(faker.name().username())
+                .mobile(faker.phoneNumber().cellPhone()).build();
+
+        userService.updateUser(user.getIdentifier(), updateDto);
+
+        UserEntity updatedUser = entityManager.find(UserEntity.class, user.getId());
+
+        assertEquals(updatedUser.getName(), updateDto.getName());
+        assertEquals(updatedUser.getNickname(), updateDto.getNickname());
+        assertEquals(updatedUser.getMobile(), updateDto.getMobile());
+        assertEquals(updatedUser.getEmail(), updateDto.getEmail());
+        assertTrue(updatedUser.getPassword().matches(updateDto.getPassword()));
+    }
+
+    @Test()
+    @DisplayName("유저의 변경값이 없는 경우 기존 값 유지")
+    void updateUserPartial() {
+        Faker faker = new Faker();
+        JoinDto dto = JoinDto.builder()
+                .identifier(faker.name().fullName())
+                .password(faker.internet().password())
+                .email(faker.internet().emailAddress())
+                .name(faker.name().fullName())
+                .nickname(faker.name().username())
+                .mobile(faker.phoneNumber().cellPhone()).build();
+
+        UserEntity user = userService.join(dto);
+
+        UpdateDto updateDto = UpdateDto.builder().build();
+        userService.updateUser(user.getIdentifier(), updateDto);
+
+        UserEntity updatedUser = entityManager.find(UserEntity.class, user.getId());
+
+
+        assertEquals(user, updatedUser);
     }
 }

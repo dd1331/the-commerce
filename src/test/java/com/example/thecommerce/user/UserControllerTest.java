@@ -83,7 +83,7 @@ public class UserControllerTest {
         List<UserEntity> users = IntStream.range(0, 11)
                 .mapToObj(i -> UserEntity.builder()
                         .identifier(faker.name().fullName())
-                        .password(faker.internet().password())
+                        .password(new Password(faker.internet().password()))
                         .email(faker.internet().emailAddress())
                         .name(faker.name().fullName())
                         .nickname(faker.name().username())
