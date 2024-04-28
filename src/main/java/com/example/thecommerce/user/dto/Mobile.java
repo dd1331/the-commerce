@@ -1,4 +1,4 @@
-package com.example.thecommerce.user;
+package com.example.thecommerce.user.dto;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;

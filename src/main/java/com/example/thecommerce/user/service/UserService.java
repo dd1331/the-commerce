@@ -1,5 +1,10 @@
-package com.example.thecommerce.user;
+package com.example.thecommerce.user.service;
 
+import com.example.thecommerce.user.dto.JoinDto;
+import com.example.thecommerce.user.dto.UpdateDto;
+import com.example.thecommerce.user.entity.UserEntity;
+import com.example.thecommerce.user.exception.UserNotFoundException;
+import com.example.thecommerce.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

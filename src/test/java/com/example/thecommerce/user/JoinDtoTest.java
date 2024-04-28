@@ -1,5 +1,6 @@
 package com.example.thecommerce.user;
 
+import com.example.thecommerce.user.dto.JoinDto;
 import org.junit.jupiter.api.Test;
 
 import javax.validation.ConstraintViolation;

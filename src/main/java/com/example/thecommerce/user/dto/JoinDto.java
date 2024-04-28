@@ -1,4 +1,4 @@
-package com.example.thecommerce.user;
+package com.example.thecommerce.user.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 public class JoinDto {
     @NotBlank
     @Size(min = 5, max = 15)
-    @Schema(example = "test")
+    @Schema(example = "test2")
     private String identifier;
 
     @NotBlank

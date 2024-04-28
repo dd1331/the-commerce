@@ -1,5 +1,9 @@
 package com.example.thecommerce.user;
 
+import com.example.thecommerce.user.dto.JoinDto;
+import com.example.thecommerce.user.exception.DuplicateUserException;
+import com.example.thecommerce.user.repository.UserRepository;
+import com.example.thecommerce.user.service.DefaultUserValidationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

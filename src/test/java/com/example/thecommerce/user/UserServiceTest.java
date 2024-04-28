@@ -1,5 +1,10 @@
 package com.example.thecommerce.user;
 
+import com.example.thecommerce.user.dto.JoinDto;
+import com.example.thecommerce.user.dto.UpdateDto;
+import com.example.thecommerce.user.entity.UserEntity;
+import com.example.thecommerce.user.exception.DuplicateUserException;
+import com.example.thecommerce.user.service.UserService;
 import com.github.javafaker.Faker;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

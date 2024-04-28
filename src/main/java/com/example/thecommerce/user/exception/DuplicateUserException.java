@@ -1,4 +1,4 @@
-package com.example.thecommerce.user;
+package com.example.thecommerce.user.exception;
 
 public class DuplicateUserException extends RuntimeException {
 

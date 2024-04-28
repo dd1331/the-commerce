@@ -1,5 +1,6 @@
 package com.example.thecommerce.user;
 
+import com.example.thecommerce.user.entity.Password;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

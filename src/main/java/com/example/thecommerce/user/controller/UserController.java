@@ -1,5 +1,9 @@
-package com.example.thecommerce.user;
+package com.example.thecommerce.user.controller;
 
+import com.example.thecommerce.user.dto.*;
+import com.example.thecommerce.user.entity.UserEntity;
+import com.example.thecommerce.user.exception.UserNotFoundException;
+import com.example.thecommerce.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,12 +31,16 @@ public class UserController {
 
     @GetMapping("/list")
     UserListResponse getUsers(@Valid @ModelAttribute UserListRequest dto) {
-        Pageable pageable = PageRequest.of(dto.page, dto.pageSize, Sort.by(dto.sortDirection, dto.sortBy.getValue()));
+        Pageable pageable = PageRequest.of(dto.getPage(), dto.getPageSize(), Sort.by(dto.getSortDirection(), dto.getSortBy().getValue()));
 
         Page<UserEntity> usersPage = userService.getUsers(pageable);
 
         return UserListResponse.builder().users(usersPage.getContent().stream()
-                .map(user -> new UserResponse(user.getName(), user.getNickname(), user.getMobile(), user.getIdentifier(), user.getEmail()))
+                .map(user -> UserResponse.builder().name(user.getName())
+                        .nickname(user.getNickname())
+                        .mobile(user.getMobile())
+                        .identifier(user.getIdentifier())
+                        .email(user.getEmail()).build())
                 .collect(Collectors.toList())).totalPages(usersPage.getTotalPages()).totalElements(usersPage.getTotalElements()).build();
 
     }

@@ -1,4 +1,4 @@
-package com.example.thecommerce.user;
+package com.example.thecommerce.user.dto;
 
 import lombok.Getter;
 

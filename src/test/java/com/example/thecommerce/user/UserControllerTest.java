@@ -1,6 +1,12 @@
 package com.example.thecommerce.user;
 
 import com.example.thecommerce.common.GlobalExceptionHandler;
+import com.example.thecommerce.user.controller.UserController;
+import com.example.thecommerce.user.dto.*;
+import com.example.thecommerce.user.entity.Password;
+import com.example.thecommerce.user.entity.UserEntity;
+import com.example.thecommerce.user.exception.DuplicateUserException;
+import com.example.thecommerce.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import org.junit.jupiter.api.Assertions;

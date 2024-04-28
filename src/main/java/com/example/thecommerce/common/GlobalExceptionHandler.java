@@ -1,7 +1,7 @@
 package com.example.thecommerce.common;
 
-import com.example.thecommerce.user.DuplicateUserException;
-import com.example.thecommerce.user.UserNotFoundException;
+import com.example.thecommerce.user.exception.DuplicateUserException;
+import com.example.thecommerce.user.exception.UserNotFoundException;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +52,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleGlobalException(Exception ex, WebRequest request) {
         String bodyOfResponse = "An unexpected error occurred: " + ex.getMessage();
 
-        logger.error("서버에러 발생. 메시지 = {}", ex.getStackTrace());
+        logger.error("서버에러 발생. 메시지 = {}", ex.getMessage());
         ex.printStackTrace();
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(bodyOfResponse);

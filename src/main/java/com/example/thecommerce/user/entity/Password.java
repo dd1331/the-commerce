@@ -1,4 +1,4 @@
-package com.example.thecommerce.user;
+package com.example.thecommerce.user.entity;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

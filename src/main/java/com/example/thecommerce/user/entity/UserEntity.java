@@ -1,5 +1,7 @@
-package com.example.thecommerce.user;
+package com.example.thecommerce.user.entity;
 
+import com.example.thecommerce.user.dto.JoinDto;
+import com.example.thecommerce.user.dto.UpdateDto;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 

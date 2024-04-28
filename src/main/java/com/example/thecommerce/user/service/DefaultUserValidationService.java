@@ -1,5 +1,8 @@
-package com.example.thecommerce.user;
+package com.example.thecommerce.user.service;
 
+import com.example.thecommerce.user.dto.JoinDto;
+import com.example.thecommerce.user.exception.DuplicateUserException;
+import com.example.thecommerce.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +17,7 @@ public class DefaultUserValidationService implements UserValidationService {
         if (email) throw new DuplicateUserException("이메일: " + dto.getEmail());
 
         boolean mobile = userRepository.existsByMobile(dto.getMobile());
-    
+
         if (mobile) throw new DuplicateUserException("휴대폰: " + dto.getMobile());
 
         boolean identifier = userRepository.existsByIdentifier(dto.getIdentifier());
