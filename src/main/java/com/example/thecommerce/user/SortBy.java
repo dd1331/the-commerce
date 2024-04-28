@@ -3,7 +3,6 @@ package com.example.thecommerce.user;
 import lombok.Getter;
 
 @Getter
-// TODO: validation
 public enum SortBy {
     JOIN("createdAt"),
     NAME("name");

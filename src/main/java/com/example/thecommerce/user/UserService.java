@@ -34,9 +34,11 @@ public class UserService {
     }
 
 
+    // TODO:  response dto
     public Page<UserEntity> getUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
+
 
     public UserEntity updateUser(String identifier, UpdateDto dto) {
 

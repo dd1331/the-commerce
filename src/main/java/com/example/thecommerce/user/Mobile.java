@@ -5,14 +5,14 @@ import javax.validation.Payload;
 import javax.validation.constraints.Pattern;
 import java.lang.annotation.*;
 
-@Pattern(regexp = "^\\d{2,3}\\d{3,4}\\d{4}$", message = "Invalid mobile number format")
+@Pattern(regexp = "^\\d{2,3}\\d{3,4}\\d{4}$", message = "01000000000 형식으로만 가능합니다")
 @Constraint(validatedBy = {})
 @Documented
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Mobile {
 
-    String message() default "Invalid mobile number format";
+    String message() default "01000000000 형식으로만 가능합니다";
 
     Class<?>[] groups() default {};
 

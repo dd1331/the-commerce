@@ -1,5 +1,6 @@
 package com.example.thecommerce.user;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -7,24 +8,24 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController()
 @RequestMapping("/api/user")
+@RequiredArgsConstructor
 public class UserController {
 
-    UserService userService;
+    private final UserService userService;
 
     @PostMapping("/join")
     @ResponseStatus(HttpStatus.CREATED)
-    void join(@RequestBody JoinDto dto) {
+    void join(@Valid @RequestBody JoinDto dto) {
         userService.join(dto);
     }
 
     @GetMapping("/list")
-    UserListResponse getUsers(@RequestParam int page,
-                              @RequestParam int pageSize,
-                              @RequestParam Sort.Direction sortDirection,
-                              @RequestParam SortBy sortBy) {
-        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sortDirection, sortBy.getValue()));
+    UserListResponse getUsers(@Valid @ModelAttribute UserListRequest dto) {
+        Pageable pageable = PageRequest.of(dto.page, dto.pageSize, Sort.by(dto.sortDirection, dto.sortBy.getValue()));
 
         Page<UserEntity> usersPage = userService.getUsers(pageable);
 
