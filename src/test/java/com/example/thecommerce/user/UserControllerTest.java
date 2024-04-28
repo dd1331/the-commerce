@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.javafaker.Faker;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -29,8 +30,7 @@ import java.util.stream.IntStream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -51,7 +51,8 @@ public class UserControllerTest {
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        mockMvc = MockMvcBuilders.standaloneSetup(userController).setControllerAdvice(GlobalExceptionHandler.class)
+        mockMvc = MockMvcBuilders.standaloneSetup(userController)
+                .setControllerAdvice(GlobalExceptionHandler.class)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true)).build();
     }
 
@@ -110,6 +111,43 @@ public class UserControllerTest {
         Assertions.assertEquals(11, responseObject.getTotalElements());
         Assertions.assertEquals(1, responseObject.getTotalPages());
         System.out.println(responseObject);
+
+
+    }
+
+    @Test
+    @DisplayName("업데이트 성공 응답값 확인")
+    void updateUser() throws Exception {
+        Faker faker = new Faker();
+        UpdateDto dto = UpdateDto.builder()
+                .password(faker.internet().password())
+                .email(faker.internet().emailAddress())
+                .name(faker.name().fullName())
+                .nickname(faker.name().username())
+                .mobile(faker.phoneNumber().cellPhone())
+                .build();
+        UserEntity fakeUser = UserEntity.builder()
+                .identifier(faker.name().fullName())
+                .password(new Password(faker.internet().password()))
+                .email(faker.internet().emailAddress())
+                .name(faker.name().fullName())
+                .nickname(faker.name().username())
+                .mobile(faker.phoneNumber().cellPhone())
+                .build();
+        System.out.println(fakeUser);
+        Mockito.when(userService.updateUser(any(String.class), any(UpdateDto.class))).thenReturn(fakeUser);
+
+        MvcResult mvcResult = mockMvc.perform(patch("/api/user/{identifier}", "dd1331")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(dto))).andExpect(status().isOk()).andReturn();
+
+        String content = mvcResult.getResponse().getContentAsString();
+
+        PostUpdateResponse responseObject = objectMapper.readValue(content, PostUpdateResponse.class);
+        Assertions.assertEquals(fakeUser.getEmail(), responseObject.getEmail());
+        Assertions.assertEquals(fakeUser.getName(), responseObject.getName());
+        Assertions.assertEquals(fakeUser.getNickname(), responseObject.getNickname());
+        Assertions.assertEquals(fakeUser.getMobile(), responseObject.getMobile());
 
 
     }

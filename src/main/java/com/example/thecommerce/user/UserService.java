@@ -13,7 +13,6 @@ public class UserService {
     private final UserRepository userRepository;
 
     // TODO: response dto
-    // 비밀번호 암호화
     public UserEntity join(JoinDto dto) {
 
         validateDuplication(dto);
@@ -21,7 +20,6 @@ public class UserService {
         UserEntity user = UserEntity.builder().build();
 
         user.join(dto);
-
 
         userRepository.save(user);
 
@@ -54,7 +52,7 @@ public class UserService {
         if (!user.isPresent()) throw new UserNotFoundException();
 
         user.get().update(dto);
-        
+
         return userRepository.save(user.get());
     }
 }

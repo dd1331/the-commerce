@@ -37,6 +37,11 @@ public class UserController {
     PostUpdateResponse updateUser(@PathVariable String identifier, @RequestBody UpdateDto dto) throws UserNotFoundException {
         UserEntity user = userService.updateUser(identifier, dto);
 
-        return PostUpdateResponse.builder().email(user.getEmail()).mobile(user.getMobile()).build();
+        return PostUpdateResponse.builder()
+                .email(user.getEmail())
+                .mobile(user.getMobile())
+                .name(user.getName())
+                .nickname(user.getNickname())
+                .build();
     }
 }

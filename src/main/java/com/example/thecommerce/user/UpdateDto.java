@@ -1,10 +1,12 @@
 package com.example.thecommerce.user;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Builder
+@AllArgsConstructor
 @Getter
+@ToString
+@RequiredArgsConstructor
 // TODO: validation
 public class UpdateDto {
     String name;
