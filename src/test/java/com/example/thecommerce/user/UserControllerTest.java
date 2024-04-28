@@ -70,7 +70,7 @@ public class UserControllerTest {
     public void joinDuplicated() throws Exception {
         JoinDto dto = JoinDto.builder().identifier("test").password("12345678").email("test@test.com").name("name").nickname("nickname").mobile("01000000000").build();
 
-        doThrow(new DuplicateUserException()).when(userService).join(dto);
+        doThrow(new DuplicateUserException("테스트")).when(userService).join(any());
 
         mockMvc.perform(post("/api/user/join")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -78,6 +78,9 @@ public class UserControllerTest {
                 andExpect(status().isConflict());
     }
 
+
+    // TODO: 빈배열
+    // update user not found
     @Test
     void getUsers() throws Exception {
         Faker faker = new Faker();
@@ -110,9 +113,6 @@ public class UserControllerTest {
         Assertions.assertEquals(11, responseObject.getUsers().size());
         Assertions.assertEquals(11, responseObject.getTotalElements());
         Assertions.assertEquals(1, responseObject.getTotalPages());
-        System.out.println(responseObject);
-
-
     }
 
     @Test
