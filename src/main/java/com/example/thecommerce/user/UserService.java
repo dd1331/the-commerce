@@ -11,11 +11,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final UserValidationService validationService;
 
     // TODO: response dto
     public UserEntity join(JoinDto dto) {
 
-        validateDuplication(dto);
+        validationService.validateDuplication(dto);
 
         UserEntity user = UserEntity.builder().build();
 
@@ -26,20 +27,6 @@ public class UserService {
         return user;
     }
 
-    public void validateDuplication(JoinDto dto) {
-        boolean email = userRepository.existsByEmail(dto.getEmail());
-
-        if (email) throw new DuplicateUserException("이메일: " + dto.getEmail());
-
-        boolean mobile = userRepository.existsByMobile(dto.getMobile());
-
-        if (mobile) throw new DuplicateUserException("휴대폰: " + dto.getMobile());
-
-        boolean identifier = userRepository.existsByIdentifier(dto.getIdentifier());
-
-        if (identifier) throw new DuplicateUserException("아이디: " + dto.getIdentifier());
-
-    }
 
     public Page<UserEntity> getUsers(Pageable pageable) {
         return userRepository.findAll(pageable);
