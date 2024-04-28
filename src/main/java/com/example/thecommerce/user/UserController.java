@@ -9,10 +9,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.stream.Collectors;
 
 @RestController()
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
+
 public class UserController {
 
     private final UserService userService;
@@ -29,7 +31,9 @@ public class UserController {
 
         Page<UserEntity> usersPage = userService.getUsers(pageable);
 
-        return UserListResponse.builder().users(usersPage.getContent()).totalPages(usersPage.getTotalPages()).totalElements(usersPage.getTotalElements()).build();
+        return UserListResponse.builder().users(usersPage.getContent().stream()
+                .map(user -> new UserResponse(user.getName(), user.getNickname(), user.getMobile(), user.getIdentifier(), user.getEmail()))
+                .collect(Collectors.toList())).totalPages(usersPage.getTotalPages()).totalElements(usersPage.getTotalElements()).build();
 
     }
 
@@ -37,7 +41,6 @@ public class UserController {
     @PatchMapping("{identifier}")
     PostUpdateResponse updateUser(@PathVariable String identifier, @RequestBody UpdateDto dto) throws UserNotFoundException {
         UserEntity user = userService.updateUser(identifier, dto);
-
         return PostUpdateResponse.builder()
                 .email(user.getEmail())
                 .mobile(user.getMobile())

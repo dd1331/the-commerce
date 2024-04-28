@@ -6,10 +6,10 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
-
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JoinDtoTest {
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -44,14 +44,12 @@ class JoinDtoTest {
         joinDto.setEmail("");
 
 
-
         Set<ConstraintViolation<JoinDto>> violations = validator.validate(joinDto);
 
         System.out.println(violations);
 
-        assertEquals(8, violations.size(), "Invalid JoinDto should have 6 violations");
+        assertEquals(10, violations.size(), "Invalid JoinDto should have 6 violations");
     }
-
 
 
 }

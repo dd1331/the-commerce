@@ -7,13 +7,12 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -33,16 +32,17 @@ import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SpringBootTest
+@WebMvcTest
 @AutoConfigureMockMvc
 public class UserControllerTest {
 
+    @Autowired
     private MockMvc mockMvc;
 
-    @Mock
+    @MockBean
     private UserService userService;
 
-    @InjectMocks
+    @Autowired
     private UserController userController;
 
     @Autowired
@@ -58,7 +58,7 @@ public class UserControllerTest {
 
     @Test
     public void join() throws Exception {
-        JoinDto dto = JoinDto.builder().identifier("test").password("12345678").email("test@test.com").name("name").nickname("nickname").mobile("01000000000").build();
+        JoinDto dto = JoinDto.builder().identifier("tes2t").password("12345678").email("test@test.com").name("name").nickname("nickname").mobile("01000000000").build();
 
         mockMvc.perform(post("/api/user/join")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -68,7 +68,7 @@ public class UserControllerTest {
 
     @Test
     public void joinDuplicated() throws Exception {
-        JoinDto dto = JoinDto.builder().identifier("test").password("12345678").email("test@test.com").name("name").nickname("nickname").mobile("01000000000").build();
+        JoinDto dto = JoinDto.builder().identifier("test1").password("12345678").email("test@test.com").name("name").nickname("nickname").mobile("01000000000").build();
 
         doThrow(new DuplicateUserException("테스트")).when(userService).join(any());
 
@@ -79,8 +79,6 @@ public class UserControllerTest {
     }
 
 
-    // TODO: 빈배열
-    // update user not found
     @Test
     void getUsers() throws Exception {
         Faker faker = new Faker();
@@ -134,7 +132,7 @@ public class UserControllerTest {
                 .nickname(faker.name().username())
                 .mobile(faker.phoneNumber().cellPhone())
                 .build();
-        System.out.println(fakeUser);
+        System.out.println("fakeUser" + fakeUser);
         Mockito.when(userService.updateUser(any(String.class), any(UpdateDto.class))).thenReturn(fakeUser);
 
         MvcResult mvcResult = mockMvc.perform(patch("/api/user/{identifier}", "dd1331")
